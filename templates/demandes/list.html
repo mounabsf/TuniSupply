@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Demandes d'allocation{% endblock %}
+{% block content %}
+<div class="page-head">
+  <h1>Demandes d'allocation</h1>
+  <div class="filters">
+    <a class="chip {% if not statut_actif %}active{% endif %}" href="?">Toutes</a>
+    {% for code, label in statuts %}
+      <a class="chip {% if statut_actif == code %}active{% endif %}" href="?statut={{ code }}">{{ label }}</a>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="card">
+  <table class="table">
+    <thead>
+      <tr><th>#</th><th>Commerce</th><th>Date</th><th>Statut</th><th>Légitimité</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+    {% for d in demandes %}
+      <tr>
+        <td>{{ d.pk }}</td>
+        <td>{{ d.commerce.nom_boutique }}</td>
+        <td>{{ d.date_demande|date:"d/m/Y H:i" }}</td>
+        <td><span class="badge badge-{{ d.statut }}">{{ d.get_statut_display }}</span></td>
+        <td>
+          <div class="score"><div class="score-bar" style="--score: {{ d.score_legitime|floatformat:0 }}%"></div></div>
+          <small>{{ d.score_legitime }}%</small>
+        </td>
+        <td class="actions">
+          <a class="btn btn-sm" href="{% url 'demandes:detail' d.pk %}">Voir</a>
+          {% if d.peut_modifier %}
+            <a class="btn btn-sm btn-outline" href="{% url 'demandes:modifier' d.pk %}">Modifier</a>
+          {% endif %}
+          {% if not d.est_terminee %}
+            <a class="btn btn-sm btn-success" href="{% url 'demandes:statut' d.pk 'cloturer' %}">Clôturer</a>
+            <a class="btn btn-sm btn-danger" href="{% url 'demandes:statut' d.pk 'annuler' %}">Annuler</a>
+          {% endif %}
+        </td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="6" class="empty">Aucune demande pour le moment.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

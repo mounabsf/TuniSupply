@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Demande d'allocation{% endblock %}
+{% block content %}
+<div class="card">
+  <h1>{% if object %}Modifier la demande #{{ object.pk }}{% else %}Nouvelle demande d'allocation{% endif %}</h1>
+
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="field">
+      {{ form.commerce.label_tag }}
+      {{ form.commerce }}
+      {{ form.commerce.errors }}
+    </div>
+
+    <h2>Produits demandés</h2>
+    {{ formset.management_form }}
+    {{ formset.non_form_errors }}
+
+    <table class="table">
+      <thead>
+        <tr><th>Produit</th><th>Quantité</th>{% if formset.can_delete %}<th>Supprimer</th>{% endif %}</tr>
+      </thead>
+      <tbody>
+      {% for f in formset %}
+        <tr>
+          <td>
+            {% for h in f.hidden_fields %}{{ h }}{% endfor %}
+            {{ f.produit }}{{ f.produit.errors }}
+          </td>
+          <td>{{ f.quantite_demandee }}{{ f.quantite_demandee.errors }}</td>
+          {% if formset.can_delete %}<td class="center">{{ f.DELETE }}</td>{% endif %}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="actions">
+      <a class="btn btn-outline" href="{% url 'demandes:liste' %}">Annuler</a>
+      <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

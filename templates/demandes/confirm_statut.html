@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Confirmation{% endblock %}
+{% block content %}
+<div class="card narrow">
+  <h1>{% if action == "cloturer" %}Clôturer{% else %}Annuler{% endif %} la demande #{{ demande.pk }} ?</h1>
+  <p>Commerce : <strong>{{ demande.commerce.nom_boutique }}</strong></p>
+  <p>Cette action est définitive.</p>
+  <form method="post">
+    {% csrf_token %}
+    <div class="actions">
+      <a class="btn btn-outline" href="{% url 'demandes:liste' %}">Retour</a>
+      <button type="submit" class="btn {% if action == 'cloturer' %}btn-success{% else %}btn-danger{% endif %}">Confirmer</button>
+    </div>
+  </form>
+</div>
+{% endblock %}

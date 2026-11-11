@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Regroupement par zone{% endblock %}
+{% block content %}
+<h1>Demandes en attente regroupées par zone</h1>
+
+{% regroup lignes by zone as zones %}
+{% for z in zones %}
+<div class="card">
+  <h2>📍 {{ z.grouper }} <small>({{ z.list.0.gouvernorat }})</small></h2>
+  <table class="table">
+    <thead><tr><th>Produit</th><th>Quantité totale</th><th>Nb de demandes</th></tr></thead>
+    <tbody>
+      {% for l in z.list %}
+      <tr><td>{{ l.produit_nom }}</td><td>{{ l.total }}</td><td>{{ l.nb }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% empty %}
+<div class="card"><p class="empty">Aucune demande en attente à regrouper.</p></div>
+{% endfor %}
+{% endblock %}
