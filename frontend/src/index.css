@@ -1,0 +1,140 @@
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces", Georgia, serif;
+
+  /* TERRACOTTA / CHOCOLAT (remplace emerald) */
+  --color-emerald-50:  #fdf4ec;
+  --color-emerald-100: #f9e4d2;
+  --color-emerald-200: #f2c7a3;
+  --color-emerald-300: #e9a273;
+  --color-emerald-400: #df7f48;
+  --color-emerald-500: #d2642f;
+  --color-emerald-600: #b44d22;
+  --color-emerald-700: #8f3b1a;
+  --color-emerald-800: #6a2c15;
+  --color-emerald-900: #4a1f0f;
+  --color-emerald-950: #33150a;
+
+  /* MARRON PROFOND (remplace teal, pour les dégradés) */
+  --color-teal-50:  #f6ede6;
+  --color-teal-100: #ead6c8;
+  --color-teal-400: #9a5a37;
+  --color-teal-500: #7d4528;
+  --color-teal-600: #633520;
+  --color-teal-700: #4b2616;
+  --color-teal-800: #381b10;
+  --color-teal-900: #271209;
+
+  /* GRIS CHAUDS / CRÈME (remplace slate) */
+  --color-slate-50:  #fbf8ef;
+  --color-slate-100: #f4eedd;
+  --color-slate-200: #e8dfc7;
+  --color-slate-300: #d3c6a6;
+  --color-slate-400: #ac9d7d;
+  --color-slate-500: #81725a;
+  --color-slate-600: #61533f;
+  --color-slate-700: #483c2e;
+  --color-slate-800: #33291e;
+  --color-slate-900: #221a12;
+
+  /* BADGES : tons chauds (remplacent sky / amber / rose) */
+  --color-sky-100: #e9ecd2;   /* olive clair */
+  --color-sky-700: #5f6a26;
+  --color-amber-100: #fbecc2; /* doré */
+  --color-amber-400: #e8b44a;
+  --color-amber-700: #8a5a0c;
+  --color-rose-50: #fbece6;
+  --color-rose-100: #f6d9cd;
+  --color-rose-500: #c4442b;
+  --color-rose-600: #a93822;
+  --color-rose-700: #8a2d1b;
+
+  /* MARQUE */
+  --color-brand-orange: #ec7a3f;
+  --color-brand-dark: #3b2012;
+  --color-brand-cream: #f6f0dd;
+  --color-brand-card: #fcf9ef;
+  --color-brand-sand: #c9b78a;
+
+  /* OMBRES DOUCES ET CHAUDES */
+  --shadow-soft: 0 1px 2px rgb(74 31 15 / 0.04), 0 8px 24px -8px rgb(74 31 15 / 0.12);
+  --shadow-lift: 0 2px 4px rgb(74 31 15 / 0.05), 0 20px 40px -12px rgb(74 31 15 / 0.22);
+}
+
+/* ============ BASE ============ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-slate-800);
+  background-color: var(--color-brand-cream);
+  /* lumière douce façon 2027 : halos terracotta et sable */
+  background-image:
+    radial-gradient(60rem 30rem at 85% -10%, rgb(236 122 63 / 0.10), transparent 60%),
+    radial-gradient(50rem 28rem at -10% 110%, rgb(201 183 138 / 0.28), transparent 60%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-serif);
+  letter-spacing: -0.02em;
+}
+
+/* Prénom en italique élégant : <em>Mohamed.</em> */
+h1 em, h2 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--color-brand-orange);
+}
+
+::selection {
+  background: var(--color-emerald-200);
+  color: var(--color-emerald-950);
+}
+
+/* Barre de défilement discrète */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-slate-300);
+  border-radius: 999px;
+  border: 3px solid var(--color-brand-cream);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-slate-400); }
+
+/* ============ COMPOSANTS RÉUTILISABLES ============ */
+/* Cartes crème : utilisez className="card" à la place de "bg-white shadow-lg" */
+.card {
+  background: var(--color-brand-card);
+  border: 1px solid rgb(201 183 138 / 0.35);
+  border-radius: 1.75rem;
+  box-shadow: var(--shadow-soft);
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lift);
+}
+
+/* Effet verre pour la navbar */
+.glass {
+  background: rgb(246 240 221 / 0.75);
+  backdrop-filter: blur(18px) saturate(1.4);
+}
+
+/* Bouton principal avec dégradé terracotta */
+.btn-primary {
+  background: linear-gradient(135deg, var(--color-brand-orange), var(--color-emerald-600));
+  color: #fff;
+  font-weight: 700;
+  border-radius: 1rem;
+  padding: .7rem 1.4rem;
+  box-shadow: 0 10px 24px -8px rgb(180 77 34 / 0.55);
+  transition: transform .2s ease, filter .2s ease;
+}
+.btn-primary:hover { transform: translateY(-2px); filter: brightness(1.06); }
