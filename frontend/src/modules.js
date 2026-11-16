@@ -66,12 +66,12 @@ export const modules = [
     icon: Warehouse,
     base: "/ressources",
     prefixes: ["/ressources"],
-    ready: false,
+    ready: true, // ← module d'Oumaima prêt (CRUD)
     description: "Réserves stratégiques des dépôts régionaux.",
     tone: { bg: "bg-violet-50", text: "text-violet-600", grad: "from-violet-500 to-purple-600" },
     actions: [
-      { label: "Ajouter un lot", icon: PlusCircle },
-      { label: "Ressources en temps réel", icon: Warehouse },
+      { label: "Ajouter un lot", icon: PlusCircle, to: "/ressources/nouveau" },
+      { label: "Ressources en temps réel", icon: Warehouse, to: "/ressources", end: true },
       { label: "Alertes de pénurie", icon: Bell },
       { label: "Incohérences de volume", icon: ShieldAlert },
     ],

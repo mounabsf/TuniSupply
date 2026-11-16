@@ -6,6 +6,8 @@ import ComingSoon from "./pages/ComingSoon.jsx";
 import Demandes from "./pages/Demandes.jsx";
 import DemandeForm from "./pages/DemandeForm.jsx";
 import Regroupement from "./pages/Regroupement.jsx";
+import Ressources from "./pages/Ressources.jsx";
+import LotForm from "./pages/LotForm.jsx";
 
 export default function App() {
   return (
@@ -18,6 +20,11 @@ export default function App() {
         <Route path="/demandes/nouvelle" element={<DemandeForm />} />
         <Route path="/demandes/:id/modifier" element={<DemandeForm />} />
         <Route path="/regroupement" element={<Regroupement />} />
+
+        {/* ===== Module Ressources (Oumaima) ===== */}
+        <Route path="/ressources" element={<Ressources />} />
+        <Route path="/ressources/nouveau" element={<LotForm />} />
+        <Route path="/ressources/:id/modifier" element={<LotForm />} />
 
         {/* ===== Modules des camarades : page « bientôt » tant que ready = false ===== */}
         {modules

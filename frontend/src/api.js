@@ -11,4 +11,5 @@ export const api = {
   get: (url) => req(url),
   post: (url, data) => req(url, { method: "POST", body: JSON.stringify(data) }),
   put: (url, data) => req(url, { method: "PUT", body: JSON.stringify(data) }),
+  delete: (url) => req(url, { method: "DELETE" }),
 };
