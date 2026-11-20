@@ -1,6 +1,9 @@
-import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
-import { Bell, Home, ShoppingBasket } from "lucide-react";
-import { isModuleActive, modules } from "../modules.js";
+import { useState } from "react";
+import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Bell, Home, LogOut, ShoppingBasket, UserRound } from "lucide-react";
+import { isModuleActive, visibleModules } from "../modules.js";
+import { useAuth } from "../auth/context.js";
+import { ROLE_BADGES, ROLE_LABELS, initiales, nomComplet } from "../roles.js";
 
 // liens du menu
 const side = ({ isActive }) =>
@@ -9,9 +12,60 @@ const side = ({ isActive }) =>
       ? "bg-brand-cream text-emerald-800 shadow-lg"
       : "text-brand-sand hover:bg-white/10 hover:text-white"
   }`;
+
+// Avatar + menu déroulant (profil, déconnexion)
+function UserMenu() {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+  const [ouvert, setOuvert] = useState(false);
+
+  const quitter = async () => {
+    setOuvert(false);
+    await logout();
+    navigate("/login", { replace: true });
+  };
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOuvert(!ouvert)}
+        title={nomComplet(user)}
+        className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-sm font-bold text-white"
+      >
+        {initiales(user)}
+      </button>
+
+      {ouvert && (
+        <>
+          <button aria-label="Fermer le menu" className="fixed inset-0 z-40 cursor-default" onClick={() => setOuvert(false)} />
+          <div className="absolute right-0 top-12 z-50 w-64 overflow-hidden rounded-2xl border border-brand-sand/30 bg-white shadow-xl shadow-slate-300/50">
+            <div className="border-b border-slate-100 p-4">
+              <p className="truncate font-bold text-slate-800">{nomComplet(user)}</p>
+              <p className="truncate text-xs text-slate-400">@{user.username}</p>
+              <span className={`mt-2 inline-block rounded-full px-2.5 py-0.5 text-xs font-bold ${ROLE_BADGES[user.role]}`}>
+                {ROLE_LABELS[user.role]}
+              </span>
+            </div>
+            <Link to="/profil" onClick={() => setOuvert(false)}
+              className="flex items-center gap-3 px-4 py-3 text-sm font-semibold text-slate-600 hover:bg-slate-50">
+              <UserRound size={17} /> Mon profil
+            </Link>
+            <button onClick={quitter}
+              className="flex w-full items-center gap-3 px-4 py-3 text-left text-sm font-semibold text-rose-600 hover:bg-rose-50">
+              <LogOut size={17} /> Se déconnecter
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 export default function Layout() {
   const { pathname } = useLocation();
-  const active = modules.find((m) => isModuleActive(m, pathname));
+  const { user } = useAuth();
+  const menu = visibleModules(user); // les modules « admin » n'apparaissent qu'aux administrateurs
+  const active = menu.find((m) => isModuleActive(m, pathname));
 
   return (
     <div className="min-h-screen">
@@ -39,7 +93,7 @@ export default function Layout() {
           >
             Accueil
           </NavLink>
-          {modules.map((m) => (
+          {menu.map((m) => (
             <Link
               key={m.key}
               to={m.base}
@@ -56,9 +110,7 @@ export default function Layout() {
           <button className="grid h-10 w-10 place-items-center rounded-xl text-slate-500 transition hover:bg-emerald-50">
             <Bell size={19} />
           </button>
-          <div className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 text-sm font-bold text-white">
-            TS
-          </div>
+          <UserMenu />
         </div>
       </header>
 
@@ -92,7 +144,7 @@ export default function Layout() {
                   </div>
                 )
               )
-            : modules.map(({ key, title, icon: Icon, base }) => (
+            : menu.map(({ key, title, icon: Icon, base }) => (
                 <NavLink key={key} to={base} title={title} className={side}>
                   <Icon size={20} />
                   <span className="hidden lg:inline">{title}</span>

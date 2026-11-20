@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { ArrowRight} from"lucide-react";
 import imageHome from "../assets/brown_h.jpg";
-import { modules } from "../modules.js";
+import { visibleModules } from "../modules.js";
+import { useAuth } from "../auth/context.js";
 export default function Home() {
+  const { user } = useAuth();
   return (
         <div className="space-y-10">
   
@@ -51,7 +53,7 @@ export default function Home() {
         <p className="text-slate-500">Choisissez un module pour accéder à ses actions.</p>
 
         <div className="mt-6 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {modules.map((m) => (
+          {visibleModules(user).map((m) => (
             <div
               key={m.key}
               className="flex flex-col rounded-3xl bg-white p-6 shadow-lg shadow-slate-200/60 transition hover:-translate-y-1"
