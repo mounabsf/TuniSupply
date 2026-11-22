@@ -7,6 +7,8 @@ import ComingSoon from "./pages/ComingSoon.jsx";
 import Demandes from "./pages/Demandes.jsx";
 import DemandeForm from "./pages/DemandeForm.jsx";
 import Regroupement from "./pages/Regroupement.jsx";
+import Ressources from "./pages/Ressources.jsx";
+import LotForm from "./pages/LotForm.jsx";
 import Anomalies from "./pages/Anomalies.jsx";
 import AnomalieForm from "./pages/AnomalieForm.jsx";
 import Alertes from "./pages/Alertes.jsx";
@@ -45,6 +47,10 @@ export default function App() {
         <Route path="/demandes/:id/modifier" element={<DemandeForm />} />
         <Route path="/regroupement" element={<Regroupement />} />
 
+        {/* ===== Module Ressources (Oumaima) ===== */}
+        <Route path="/ressources" element={<Ressources />} />
+        <Route path="/ressources/nouveau" element={<LotForm />} />
+        <Route path="/ressources/:id/modifier" element={<LotForm />} />
         {/* ===== Module Anomalies & alertes ===== */}
         <Route path="/anomalies" element={<Anomalies />} />
         <Route path="/anomalies/nouveau" element={<AnomalieForm />} />
