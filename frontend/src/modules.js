@@ -22,22 +22,21 @@ export const modules = [
       { label: "Regroupement par zone", icon: MapPinned, to: "/regroupement" },
     ],
   },
-  {
+    {
     key: "stocks",
     title: "Stocks des commerces",
     short: "Stocks",
     owner: "Yessin",
     icon: Boxes,
-    base: "/stocks",
-    prefixes: ["/stocks"],
-    ready: false,
+    base: "/stock",
+    prefixes: ["/stock"],
+    ready: true,
     description: "Suivi et contrôle des inventaires des Hanouts.",
     tone: { bg: "bg-sky-50", text: "text-sky-600", grad: "from-sky-500 to-blue-600" },
-    actions: [
-      { label: "Déclarer un stock", icon: Package },
-      { label: "Stocks par région", icon: Boxes },
-      { label: "Seuils critiques", icon: Gauge },
-      { label: "Affecter les stocks", icon: Layers },
+        actions: [
+      { label: "Produits en stock", icon: Boxes, to: "/stock", end: true },
+      { label: "Nouveau produit", icon: PlusCircle, to: "/stock/nouveau" },
+      { label: "Historique", icon: ClipboardList, to: "/stock/historique" },
     ],
   },
   {
