@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'demandes',
+    'anomalies',
+    'comptes',
+    'dashboard',
     'rest_framework'
 ]
 
@@ -129,3 +132,13 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = "/admin/login/"        # temporaire, en attendant le login du groupe
 LANGUAGE_CODE = "fr"
+
+# ---------- Gestion des comptes (module comptes) ----------
+# Origines autorisées à envoyer des requêtes POST/PUT/DELETE avec le cookie CSRF
+# (le frontend Vite tourne sur le port 5173 en développement).
+CSRF_TRUSTED_ORIGINS = ["http://localhost:5173", "http://127.0.0.1:5173"]
+
+# Limite les tentatives de connexion / d'inscription (par adresse IP).
+REST_FRAMEWORK = {
+    "DEFAULT_THROTTLE_RATES": {"login": "10/min", "register": "10/hour"},
+}

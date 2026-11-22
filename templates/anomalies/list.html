@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Liste des Alertes et Anomalies</h2>
+    
+    <!-- Filtre par statut si besoin -->
+    <form method="get" class="mb-3">
+        <select name="statut" class="form-select w-auto d-inline-block" onchange="this.form.submit()">
+            <option value="">Tous les statuts</option>
+            {% for s_val, s_label in statuts %}
+                <option value="{{ s_val }}" {% if statut_actif == s_val %}selected{% endif %}>{{ s_label }}</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <a href="{% url 'anomalies:creer' %}" class="btn btn-primary mb-3">Signaler une anomalie</a>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Description / Produit</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for alerte in alertes %}
+            <tr>
+                <td>#{{ alerte.pk }}</td>
+                <td>{{ alerte }}</td>
+                <td><span class="badge bg-secondary">{{ alerte.statut|default:"En cours" }}</span></td>
+                <td>
+                    <a href="{% url 'anomalies:detail' alerte.pk %}" class="btn btn-sm btn-info">Détails</a>
+                    <a href="{% url 'anomalies:modifier' alerte.pk %}" class="btn btn-sm btn-warning">Modifier</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" class="text-center">Aucune alerte enregistrée.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

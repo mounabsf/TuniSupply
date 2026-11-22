@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+    <h2>Détail de l'Alerte #{{ alerte.pk }}</h2>
+    
+    <div class="card p-3 mb-3">
+        <p><strong>Informations de l'alerte :</strong> {{ alerte }}</p>
+        <p><strong>Statut :</strong> {{ alerte.statut }}</p>
+    </div>
+
+    <div class="mb-3">
+        <a href="{% url 'anomalies:statut' alerte.pk 'traiter' %}" class="btn btn-success">Marquer comme traitée</a>
+        <a href="{% url 'anomalies:statut' alerte.pk 'archiver' %}" class="btn btn-secondary">Archiver</a>
+    </div>
+
+    <a href="{% url 'anomalies:liste' %}" class="btn btn-secondary">Retour à la liste</a>
+</div>
+{% endblock %}
