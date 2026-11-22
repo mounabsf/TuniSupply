@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout.jsx";
 import { modules } from "./modules.js";
 import Home from "./pages/Home.jsx";
+import Statistiques from "./pages/Statistiques.jsx";
 import ComingSoon from "./pages/ComingSoon.jsx";
 import Demandes from "./pages/Demandes.jsx";
 import DemandeForm from "./pages/DemandeForm.jsx";
@@ -28,6 +29,7 @@ export default function App() {
       <Route element={<RequireAuth />}>
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
+        <Route path="/statistiques" element={<Statistiques />} />
         <Route path="/profil" element={<Profil />} />
 
         {/* ===== Module Gestion des comptes : administrateurs seulement ===== */}
@@ -46,6 +48,7 @@ export default function App() {
         {/* ===== Module Anomalies & alertes ===== */}
         <Route path="/anomalies" element={<Anomalies />} />
         <Route path="/anomalies/nouveau" element={<AnomalieForm />} />
+        <Route path="/anomalies/:id/modifier" element={<AnomalieForm />} />
         <Route path="/anomalies/alertes" element={<Alertes />} />
         <Route path="/anomalies/liees" element={<AnomaliesLiees />} />
         <Route path="/anomalies/liees/:id" element={<AnomaliesLiees />} />

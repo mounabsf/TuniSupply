@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { api } from "../api.js";
 import { TYPES } from "../anomaliesConfig.js";
 
@@ -7,6 +7,7 @@ const input = "w-full rounded-xl border border-slate-200 bg-white px-4 py-2.5 ou
 
 export default function AnomalieForm() {
   const navigate = useNavigate();
+  const { id } = useParams();            // présent : on MODIFIE le signalement #id
   const [commerces, setCommerces] = useState([]);
   const [commerce, setCommerce] = useState("");
   const [type, setType] = useState("PRIX_ABUSIF");
@@ -17,11 +18,24 @@ export default function AnomalieForm() {
     api.get("/commerces/").then(setCommerces).catch(() => setErreur("Impossible de charger les commerces."));
   }, []);
 
+  useEffect(() => {
+    if (!id) return;
+    api.get(`/signalements/${id}/`)
+      .then((s) => {
+        setType(s.type_anomalie);
+        setCommerce(s.commerce ? String(s.commerce) : "");
+        setDescription(s.description);
+      })
+      .catch(() => setErreur("Impossible de charger ce signalement."));
+  }, [id]);
+
   const envoyer = async (e) => {
     e.preventDefault();
     setErreur("");
     try {
-      await api.post("/signalements/", { commerce: commerce || null, type_anomalie: type, description });
+      const data = { commerce: commerce || null, type_anomalie: type, description };
+      if (id) await api.patch(`/signalements/${id}/`, data);
+      else await api.post("/signalements/", data);
       navigate("/anomalies");
     } catch (err) {
       setErreur(err.description?.[0] || err.detail || "Vérifiez les champs du formulaire.");
@@ -30,7 +44,7 @@ export default function AnomalieForm() {
 
   return (
     <form onSubmit={envoyer} className="mx-auto max-w-2xl rounded-3xl bg-white p-8 shadow-xl shadow-slate-200/60">
-      <h1 className="text-2xl font-extrabold text-slate-800">Nouveau signalement</h1>
+      <h1 className="text-2xl font-extrabold text-slate-800">{id ? `Modifier le signalement #${id}` : "Nouveau signalement"}</h1>
       <p className="mt-1 text-sm text-slate-500">Signalez un prix abusif, un stockage excessif ou un produit périmé.</p>
 
       <label className="mt-6 block text-sm font-semibold">Type d'anomalie</label>

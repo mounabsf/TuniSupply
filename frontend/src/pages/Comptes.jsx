@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Pencil, Power, Search, Trash2, UserPlus } from "lucide-react";
+import { AlertTriangle, Pencil, Power, Search, Trash2, UserPlus } from "lucide-react";
 import Erreurs from "../components/Erreurs.jsx";
 import { useAuth } from "../auth/context.js";
 import { api } from "../api.js";
@@ -22,6 +22,7 @@ export default function Comptes() {
   const [actif, setActif] = useState("");
   const [version, setVersion] = useState(0); // incrémenté pour recharger après une action
   const [erreurs, setErreurs] = useState([]);
+  const [aSupprimer, setASupprimer] = useState(null); // compte en attente de confirmation
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -47,11 +48,10 @@ export default function Comptes() {
   const basculer = (c) =>
     agir(() => api.patch(`/comptes/${c.id}/`, { is_active: !c.is_active }));
 
-  const supprimer = (c) => {
-    if (!window.confirm(
-      `Supprimer définitivement le compte « ${c.username} » ?\n\nCette action est irréversible. ` +
-      `Pour simplement bloquer l'accès, utilisez plutôt « Désactiver ».`)) return;
-    agir(() => api.delete(`/comptes/${c.id}/`));
+  const confirmerSuppression = async () => {
+    const c = aSupprimer;
+    setASupprimer(null);
+    await agir(() => api.delete(`/comptes/${c.id}/`));
   };
 
   return (
@@ -143,7 +143,7 @@ export default function Comptes() {
                         className="grid h-9 w-9 place-items-center rounded-xl bg-amber-50 text-amber-700 hover:bg-amber-100 disabled:cursor-not-allowed disabled:opacity-40">
                         <Power size={15} />
                       </button>
-                      <button onClick={() => supprimer(c)} disabled={soi}
+                      <button onClick={() => setASupprimer(c)} disabled={soi}
                         title={soi ? "Vous ne pouvez pas supprimer votre compte" : "Supprimer"}
                         className="grid h-9 w-9 place-items-center rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-100 disabled:cursor-not-allowed disabled:opacity-40">
                         <Trash2 size={15} />
@@ -156,6 +156,31 @@ export default function Comptes() {
           </tbody>
         </table>
       </div>
+      {aSupprimer && (
+        <div className="fixed inset-0 z-50 grid place-items-center bg-slate-900/50 px-4" onClick={() => setASupprimer(null)}>
+          <div role="alertdialog" aria-modal="true" onClick={(e) => e.stopPropagation()}
+            className="w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl">
+            <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-rose-50 text-rose-500">
+              <AlertTriangle size={28} />
+            </div>
+            <h2 className="mt-4 text-center text-xl font-extrabold text-slate-800">Supprimer cet utilisateur ?</h2>
+            <p className="mt-2 text-center text-slate-500">
+              Voulez-vous vraiment supprimer <strong className="text-slate-800">{nomComplet(aSupprimer)}</strong> (@{aSupprimer.username}) ?
+              Cette action est <strong>irréversible</strong>. Pour simplement bloquer l'accès, utilisez plutôt « Désactiver ».
+            </p>
+            <div className="mt-7 flex justify-center gap-3">
+              <button autoFocus onClick={() => setASupprimer(null)}
+                className="rounded-xl border border-slate-200 px-5 py-2.5 font-semibold text-slate-600 hover:bg-slate-50">
+                Annuler
+              </button>
+              <button onClick={confirmerSuppression}
+                className="rounded-xl bg-rose-600 px-5 py-2.5 font-semibold text-white shadow-lg shadow-rose-600/30 hover:bg-rose-700">
+                Oui, supprimer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

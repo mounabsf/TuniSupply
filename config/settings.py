@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'demandes',
     'anomalies',
     'comptes',
+    'dashboard',
     'rest_framework'
 ]
 

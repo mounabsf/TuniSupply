@@ -33,6 +33,22 @@ def calculer_urgence(signalements):
     return niveau
 
 
+def recalculer_alerte(alerte):
+    """Remet à jour le message et l'urgence d'une alerte d'après les signalements qu'elle regroupe.
+    Une alerte qui n'en regroupe plus aucun n'a plus de raison d'être : elle est supprimée."""
+    liste = list(alerte.signalements.all())
+    if not liste:
+        alerte.delete()
+        return None
+    zone = alerte.zone
+    types = sorted({s.get_type_anomalie_display() for s in liste})
+    alerte.niveau_urgence = calculer_urgence(liste)
+    alerte.message = (f"{len(liste)} signalement(s) dans la zone {zone.nom} "
+                      f"({zone.gouvernorat}) : {', '.join(types)}")[:255]
+    alerte.save()
+    return alerte
+
+
 def rattacher_a_alerte(signalement):
     """Regroupe le signalement dans l'alerte récente de sa zone (ou en crée une).
     Sans commerce (donc sans zone), aucune alerte n'est générée."""
@@ -47,13 +63,33 @@ def rattacher_a_alerte(signalement):
         alerte = Alerte.objects.create(zone=zone)
 
     alerte.signalements.add(signalement)
-    liste = list(alerte.signalements.all())
-    types = sorted({s.get_type_anomalie_display() for s in liste})
-    alerte.niveau_urgence = calculer_urgence(liste)
-    alerte.message = (f"{len(liste)} signalement(s) dans la zone {zone.nom} "
-                      f"({zone.gouvernorat}) : {', '.join(types)}")[:255]
-    alerte.save()
-    return alerte
+    return recalculer_alerte(alerte)
+
+
+def synchroniser_alertes(signalement, ancienne_zone_id):
+    """À appeler après la MODIFICATION d'un signalement.
+    - zone inchangée : le signalement reste dans ses alertes, qu'on recalcule (le type a pu changer) ;
+    - zone changée (ou commerce retiré) : il quitte ses anciennes alertes (recalculées ou supprimées si
+      vides) puis est rattaché à celle de sa nouvelle zone."""
+    zone = signalement.zone
+    nouvelle_zone_id = zone.pk if zone else None
+    if nouvelle_zone_id == ancienne_zone_id:
+        for alerte in list(signalement.alertes.all()):
+            recalculer_alerte(alerte)
+        return
+    anciennes = list(signalement.alertes.all())
+    signalement.alertes.clear()
+    for alerte in anciennes:
+        recalculer_alerte(alerte)
+    rattacher_a_alerte(signalement)
+
+
+def supprimer_signalement(signalement):
+    """Supprime le signalement puis met à jour (ou supprime si vides) les alertes qui le regroupaient."""
+    alertes = list(signalement.alertes.all())
+    signalement.delete()
+    for alerte in alertes:
+        recalculer_alerte(alerte)
 
 
 def signalements_lies(signalement):
