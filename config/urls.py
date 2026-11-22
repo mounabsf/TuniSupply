@@ -22,5 +22,9 @@ urlpatterns = [
     path("demandes/", include("demandes.urls")),
     path("api/", include("demandes.api_urls")),
     path("api/ressources/", include("ressources.api_urls")),
+    path("api/", include("anomalies.api_urls")),
+    path("api/", include("comptes.api_urls")),
+    path("api/", include("dashboard.urls")),
+    path('anomalies/', include('anomalies.urls')),
 
 ]

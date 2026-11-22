@@ -1,7 +1,7 @@
 import {
   AlertTriangle, Boxes, Brain, ClipboardList, Gauge, Map, MapPinned,
   PlusCircle, ShieldAlert, Sparkles, Truck, Warehouse, Layers, Bell,
-  Package, Route, Search,
+  Package, Route, Search, UserCog, UserPlus, Users,
 } from "lucide-react";
 
 export const modules = [
@@ -48,14 +48,14 @@ export const modules = [
     icon: AlertTriangle,
     base: "/anomalies",
     prefixes: ["/anomalies"],
-    ready: false,
+    ready: true,
     description: "Signalements de prix abusifs et de spéculation.",
     tone: { bg: "bg-amber-50", text: "text-amber-600", grad: "from-amber-500 to-orange-600" },
     actions: [
-      { label: "Nouveau signalement", icon: PlusCircle },
-      { label: "Anomalies signalées", icon: AlertTriangle },
-      { label: "Alertes prioritaires", icon: Bell },
-      { label: "Anomalies liées", icon: Search },
+      { label: "Anomalies signalées", icon: AlertTriangle, to: "/anomalies", end: true },
+      { label: "Nouveau signalement", icon: PlusCircle, to: "/anomalies/nouveau" },
+      { label: "Alertes prioritaires", icon: Bell, to: "/anomalies/alertes" },
+      { label: "Anomalies liées", icon: Search, to: "/anomalies/liees" },
     ],
   },
   {
@@ -111,7 +111,28 @@ export const modules = [
       { label: "Risque de spéculation", icon: ShieldAlert },
     ],
   },
+  {
+    key: "comptes",
+    title: "Gestion des comptes",
+    short: "Comptes",
+    owner: "Tout le groupe",
+    icon: UserCog,
+    base: "/comptes",
+    prefixes: ["/comptes"],
+    ready: true,
+    adminOnly: true, // visible et accessible aux administrateurs uniquement
+    description: "Création, modification et suppression des comptes utilisateurs.",
+    tone: { bg: "bg-slate-100", text: "text-slate-700", grad: "from-slate-600 to-slate-800" },
+    actions: [
+      { label: "Tous les comptes", icon: Users, to: "/comptes", end: true },
+      { label: "Nouveau compte", icon: UserPlus, to: "/comptes/nouveau" },
+    ],
+  },
 ];
+
+// Modules affichés dans les menus : « adminOnly » est réservé au rôle ADMIN.
+export const visibleModules = (user) =>
+  modules.filter((m) => !m.adminOnly || user?.role === "ADMIN");
 
 export const isModuleActive = (m, pathname) =>
   m.prefixes.some((p) => pathname === p || pathname.startsWith(p + "/"));
