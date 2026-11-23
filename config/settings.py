@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'dashboard',
     'stocks',
     'rest_framework',
+    'inventory.apps.InventoryConfig',
+
 ]
 
 MIDDLEWARE = [

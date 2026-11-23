@@ -7,7 +7,8 @@ import { COULEURS } from "../couleurs.js";
 import { visibleModules } from "../modules.js";
 import { useAuth } from "../auth/context.js";
 import { useDashboard } from "../hooks.js";
-
+import { useEffect, useState } from "react";
+import { api } from "../api.js";
 const COULEUR_STATUT = {
   EN_ATTENTE: COULEURS.dore, ACCEPTEE: COULEURS.terracotta, LIVREE: COULEURS.olive,
   REFUSEE: COULEURS.brique, ANNULEE: COULEURS.sable,
@@ -53,7 +54,10 @@ function Attente({ m }) {
 export default function Home() {
   const { user } = useAuth();
   const { d, erreur, charger } = useDashboard();
-
+  const [produitsStock, setProduitsStock] = useState([]);
+  useEffect(() => {
+    api.get("/stock/products/").then(setProduitsStock).catch(() => {});
+  }, []);
   if (erreur && !d) {
     return (
       <div className="rounded-3xl bg-white p-10 text-center shadow-lg shadow-slate-200/60">
@@ -95,6 +99,23 @@ export default function Home() {
             parts={d.comptes.par_role.map((r, k) => ({ label: r.label, value: r.n, color: [COULEURS.brique, COULEURS.dore, COULEURS.olive, COULEURS.chocolat][k] }))} />
         </Carte>
       );
+                if (m.key === "stocks") {
+      // les 5 produits les plus en stock
+      const top = [...produitsStock].sort((a, b) => b.quantity - a.quantity).slice(0, 5);
+      return (
+        <Carte key={m.key} titre={m.title} module={m}>
+          {top.length ? (
+            <Barres items={top.map((p) => ({
+              label: p.name,
+              value: p.quantity,
+              color: p.quantity === 0 ? COULEURS.brique : p.is_low_stock ? COULEURS.dore : COULEURS.olive,
+            }))} />
+          ) : (
+            <p className="py-8 text-center text-sm text-slate-400">Aucun produit en stock.</p>
+          )}
+        </Carte>
+      );
+    }
     const section = d.sections.find((s) => s.cle === m.key);
     if (section?.graphiques[0])
       return <Carte key={m.key} titre={m.title} module={m}><Graphique g={section.graphiques[0]} /></Carte>;

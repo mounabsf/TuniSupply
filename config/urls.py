@@ -27,5 +27,7 @@ urlpatterns = [
     path("api/", include("dashboard.urls")),
     path("api/stocks/", include("stocks.api_urls")),
     path('anomalies/', include('anomalies.urls')),
+    path('api/stock/', include('inventory.urls')),
+
 
 ]

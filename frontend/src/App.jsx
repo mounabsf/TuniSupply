@@ -22,6 +22,9 @@ import RequireAuth from "./auth/RequireAuth.jsx";
 import Stocks from "./pages/Stocks.jsx";
 import StockForm from "./pages/StockForm.jsx";
 
+import InventoryApp from "./pages/InventoryApp.jsx";
+import Stock from "./pages/Stock.jsx";
+import StockHistorique from "./pages/StockHistorique.jsx";
 export default function App() {
   return (
     <Routes>
@@ -68,7 +71,13 @@ export default function App() {
         <Route path="/anomalies/alertes" element={<Alertes />} />
         <Route path="/anomalies/liees" element={<AnomaliesLiees />} />
         <Route path="/anomalies/liees/:id" element={<AnomaliesLiees />} />
+        <Route path="/anomalies/liees/:id" element={<AnomaliesLiees />} />
 
+{/* ===== Module Stock ===== */}
+<Route path="/stock" element={<Stock />} />
+<Route path="/stock/nouveau" element={<Stock />} />
+<Route path="/stock/historique" element={<StockHistorique />} />
+        {/* ===== Modules des camarades : page « bientôt » tant que ready = false ===== */}
         {/* ===== Modules des camarades : page « bientôt » tant que ready = false ===== */}
         {modules
           .filter((m) => !m.ready)
