@@ -27,7 +27,7 @@ load_dotenv(BASE_DIR / '.env')
 # Récupérer la clé secrète 
 SECRET_KEY = os.getenv('SECRET_KEY') 
 # Récupérer DEBUG 
-DEBUG = os.getenv('DEBUG', 'False') == 'True' 
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = []
 
 
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'anomalies',
     'comptes',
     'dashboard',
+    'logistique',
     'stocks',
     'rest_framework',
     'inventory.apps.InventoryConfig',

@@ -9,7 +9,7 @@ import { btnGhost, btnPrimary, input, label } from "../ui.js";
 
 const VIDE = {
   username: "", email: "", first_name: "", last_name: "", telephone: "",
-  role: "COMMERCANT", is_active: true, password: "",
+  depot_rattachement: "", role: "COMMERCANT", is_active: true, password: "",
 };
 
 export default function CompteForm() {
@@ -37,7 +37,8 @@ export default function CompteForm() {
     setEnvoi(true);
     const data = {
       username: f.username, email: f.email, first_name: f.first_name, last_name: f.last_name,
-      telephone: f.telephone, role: f.role, is_active: f.is_active,
+      telephone: f.telephone, role: f.role, depot_rattachement: f.depot_rattachement,
+      is_active: f.is_active,
     };
     if (f.password) data.password = f.password; // vide en modification = mot de passe inchangé
     try {
@@ -92,6 +93,13 @@ export default function CompteForm() {
           </select>
           {soi && <p className="mt-1 text-xs text-slate-400">Vous ne pouvez pas changer votre propre rôle.</p>}
         </div>
+        {f.role === "LOGISTICIEN" && (
+          <div>
+            <label className={label} htmlFor="depot_rattachement">Dépôt de rattachement</label>
+            <input id="depot_rattachement" className={`${input} mt-1`}
+              value={f.depot_rattachement} onChange={maj("depot_rattachement")} />
+          </div>
+        )}
         <div>
           <label className={label} htmlFor="password">{id ? "Nouveau mot de passe" : "Mot de passe *"}</label>
           <div className="mt-1">
