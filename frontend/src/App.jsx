@@ -18,6 +18,8 @@ import Register from "./pages/Register.jsx";
 import Profil from "./pages/Profil.jsx";
 import Comptes from "./pages/Comptes.jsx";
 import CompteForm from "./pages/CompteForm.jsx";
+import Operations from "./pages/Operations.jsx";
+import OperationForm from "./pages/OperationForm.jsx";
 import RequireAuth from "./auth/RequireAuth.jsx";
 
 export default function App() {
@@ -58,6 +60,11 @@ export default function App() {
         <Route path="/anomalies/alertes" element={<Alertes />} />
         <Route path="/anomalies/liees" element={<AnomaliesLiees />} />
         <Route path="/anomalies/liees/:id" element={<AnomaliesLiees />} />
+
+        {/* ===== Module Logistique (Firas) ===== */}
+        <Route path="/logistique" element={<Operations />} />
+        <Route path="/logistique/nouvelle" element={<OperationForm />} />
+        <Route path="/logistique/:id/modifier" element={<OperationForm />} />
 
         {/* ===== Modules des camarades : page « bientôt » tant que ready = false ===== */}
         {modules
