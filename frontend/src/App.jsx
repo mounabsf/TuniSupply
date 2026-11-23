@@ -19,6 +19,9 @@ import Profil from "./pages/Profil.jsx";
 import Comptes from "./pages/Comptes.jsx";
 import CompteForm from "./pages/CompteForm.jsx";
 import RequireAuth from "./auth/RequireAuth.jsx";
+import Stocks from "./pages/Stocks.jsx";
+import StockForm from "./pages/StockForm.jsx";
+
 import InventoryApp from "./pages/InventoryApp.jsx";
 import Stock from "./pages/Stock.jsx";
 import StockHistorique from "./pages/StockHistorique.jsx";
@@ -35,6 +38,14 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/statistiques" element={<Statistiques />} />
         <Route path="/profil" element={<Profil />} />
+
+        <Route element={<RequireAuth roles={["ADMIN", "COMMERCANT", "INSPECTEUR"]} />}>
+          <Route path="/stocks" element={<Stocks />} />
+        </Route>
+        <Route element={<RequireAuth roles={["ADMIN", "COMMERCANT"]} />}>
+          <Route path="/stocks/nouveau" element={<StockForm />} />
+          <Route path="/stocks/:id/modifier" element={<StockForm />} />
+        </Route>
 
         {/* ===== Module Gestion des comptes : administrateurs seulement ===== */}
         <Route element={<RequireAuth roles={["ADMIN"]} />}>
@@ -74,8 +85,6 @@ export default function App() {
             <Route key={m.key} path={m.base} element={<ComingSoon module={m} />} />
           ))}
 
-        {/* Les camarades ajoutent ici leurs routes, par exemple :
-            <Route path="/stocks" element={<Stocks />} />  */}
       </Route>
       </Route>
     </Routes>
