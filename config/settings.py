@@ -27,7 +27,7 @@ load_dotenv(BASE_DIR / '.env')
 # Récupérer la clé secrète 
 SECRET_KEY = os.getenv('SECRET_KEY') 
 # Récupérer DEBUG 
-DEBUG = os.getenv('DEBUG', 'False') == 'True' 
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = []
 
 
@@ -41,10 +41,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'demandes',
+    'ressources',
     'anomalies',
     'comptes',
     'dashboard',
-    'rest_framework'
+    'logistique',
+    'stocks',
+    'rest_framework',
+    'inventory.apps.InventoryConfig',
+
 ]
 
 MIDDLEWARE = [

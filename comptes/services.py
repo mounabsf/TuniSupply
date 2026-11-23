@@ -24,12 +24,14 @@ def _assurer_inspecteur(user):
     Inspecteur.objects.create(user=user, badge_inspecteur=badge)
 
 
-def appliquer_role(user, role, telephone=None):
+def appliquer_role(user, role, telephone=None, depot_rattachement=None):
     """Enregistre le rôle (et le téléphone) et garde is_staff cohérent avec le rôle ADMIN."""
     profil = assurer_profil(user)
     profil.role = role
     if telephone is not None:
         profil.telephone = telephone
+    if depot_rattachement is not None:
+        profil.depot_rattachement = depot_rattachement
     profil.save()
 
     est_admin = role == Role.ADMIN

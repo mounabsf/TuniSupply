@@ -11,10 +11,11 @@ class ProduitSerializer(serializers.ModelSerializer):
 
 class CommerceSerializer(serializers.ModelSerializer):
     zone_nom = serializers.CharField(source="zone.nom", read_only=True)
+    commercant_id = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Commerce
-        fields = ["id", "nom_boutique", "zone_nom"]
+        fields = ["id", "nom_boutique", "zone_nom", "commercant_id"]
 
 
 class LigneSerializer(serializers.ModelSerializer):
