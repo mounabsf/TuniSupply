@@ -79,7 +79,14 @@ export default function App() {
         <Route path="/logistique/nouvelle" element={<OperationForm />} />
         <Route path="/logistique/:id/modifier" element={<OperationForm />} />
         <Route path="/anomalies/liees/:id" element={<AnomaliesLiees />} />
-
+        {/* ===== Module Gestion des stocks (Yessin) ===== */}
+        <Route element={<RequireAuth roles={["ADMIN", "COMMERCANT", "INSPECTEUR"]} />}>
+          <Route path="/stocks" element={<Stocks />} />
+        </Route>
+        <Route element={<RequireAuth roles={["ADMIN", "COMMERCANT"]} />}>
+          <Route path="/stocks/nouveau" element={<StockForm />} />
+          <Route path="/stocks/:id/modifier" element={<StockForm />} />
+        </Route>
 {/* ===== Module Stock ===== */}
 <Route path="/stock" element={<Stock />} />
 <Route path="/stock/nouveau" element={<Stock />} />
