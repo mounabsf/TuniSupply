@@ -1,6 +1,6 @@
 import {
   AlertTriangle, Boxes, Brain, ClipboardList, Gauge, Map, MapPinned,
-  PlusCircle, ShieldAlert, Sparkles, Truck, Warehouse, Layers, Bell,
+  PlusCircle, ShieldAlert, Sparkles, Truck, Warehouse, Bell,
   Package, Route, Search, UserCog, UserPlus, Users,
 } from "lucide-react";
 
@@ -30,14 +30,13 @@ export const modules = [
     icon: Boxes,
     base: "/stocks",
     prefixes: ["/stocks"],
-    ready: false,
+    ready: true,
+    roles: ["ADMIN", "COMMERCANT", "INSPECTEUR"],
     description: "Suivi et contrôle des inventaires des Hanouts.",
     tone: { bg: "bg-sky-50", text: "text-sky-600", grad: "from-sky-500 to-blue-600" },
     actions: [
-      { label: "Déclarer un stock", icon: Package },
-      { label: "Stocks par région", icon: Boxes },
-      { label: "Seuils critiques", icon: Gauge },
-      { label: "Affecter les stocks", icon: Layers },
+      { label: "Stocks", icon: Boxes, to: "/stocks", end: true },
+      { label: "Déclarer un stock", icon: Package, to: "/stocks/nouveau", roles: ["ADMIN", "COMMERCANT"] },
     ],
   },
   {
@@ -132,7 +131,8 @@ export const modules = [
 
 // Modules affichés dans les menus : « adminOnly » est réservé au rôle ADMIN.
 export const visibleModules = (user) =>
-  modules.filter((m) => !m.adminOnly || user?.role === "ADMIN");
+  modules.filter((m) => (!m.adminOnly || user?.role === "ADMIN")
+    && (!m.roles || m.roles.includes(user?.role)));
 
 export const isModuleActive = (m, pathname) =>
   m.prefixes.some((p) => pathname === p || pathname.startsWith(p + "/"));

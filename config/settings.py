@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'anomalies',
     'comptes',
     'dashboard',
+    'stocks',
     'rest_framework',
 ]
 
