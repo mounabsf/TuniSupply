@@ -21,7 +21,12 @@ import CompteForm from "./pages/CompteForm.jsx";
 import Operations from "./pages/Operations.jsx";
 import OperationForm from "./pages/OperationForm.jsx";
 import RequireAuth from "./auth/RequireAuth.jsx";
+import Stocks from "./pages/Stocks.jsx";
+import StockForm from "./pages/StockForm.jsx";
 
+import InventoryApp from "./pages/InventoryApp.jsx";
+import Stock from "./pages/Stock.jsx";
+import StockHistorique from "./pages/StockHistorique.jsx";
 export default function App() {
   return (
     <Routes>
@@ -35,6 +40,14 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/statistiques" element={<Statistiques />} />
         <Route path="/profil" element={<Profil />} />
+
+        <Route element={<RequireAuth roles={["ADMIN", "COMMERCANT", "INSPECTEUR"]} />}>
+          <Route path="/stocks" element={<Stocks />} />
+        </Route>
+        <Route element={<RequireAuth roles={["ADMIN", "COMMERCANT"]} />}>
+          <Route path="/stocks/nouveau" element={<StockForm />} />
+          <Route path="/stocks/:id/modifier" element={<StockForm />} />
+        </Route>
 
         {/* ===== Module Gestion des comptes : administrateurs seulement ===== */}
         <Route element={<RequireAuth roles={["ADMIN"]} />}>
@@ -65,7 +78,13 @@ export default function App() {
         <Route path="/logistique" element={<Operations />} />
         <Route path="/logistique/nouvelle" element={<OperationForm />} />
         <Route path="/logistique/:id/modifier" element={<OperationForm />} />
+        <Route path="/anomalies/liees/:id" element={<AnomaliesLiees />} />
 
+{/* ===== Module Stock ===== */}
+<Route path="/stock" element={<Stock />} />
+<Route path="/stock/nouveau" element={<Stock />} />
+<Route path="/stock/historique" element={<StockHistorique />} />
+        {/* ===== Modules des camarades : page « bientôt » tant que ready = false ===== */}
         {/* ===== Modules des camarades : page « bientôt » tant que ready = false ===== */}
         {modules
           .filter((m) => !m.ready)
@@ -73,8 +92,6 @@ export default function App() {
             <Route key={m.key} path={m.base} element={<ComingSoon module={m} />} />
           ))}
 
-        {/* Les camarades ajoutent ici leurs routes, par exemple :
-            <Route path="/stocks" element={<Stocks />} />  */}
       </Route>
       </Route>
     </Routes>

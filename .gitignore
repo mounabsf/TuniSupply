@@ -23,3 +23,11 @@ Thumbs.db
 
 # Logs
 *.log
+venv/
+.venv/
+__pycache__/
+*.pyc
+.env
+
+frontend/node_modules/
+frontend/dist/

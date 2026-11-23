@@ -1,6 +1,6 @@
 import {
   AlertTriangle, Boxes, Brain, ClipboardList, Gauge, Map, MapPinned,
-  PlusCircle, ShieldAlert, Sparkles, Truck, Warehouse, Layers, Bell,
+  PlusCircle, ShieldAlert, Sparkles, Truck, Warehouse, Bell,
   Package, Route, Search, UserCog, UserPlus, Users,
 } from "lucide-react";
 
@@ -22,23 +22,25 @@ export const modules = [
       { label: "Regroupement par zone", icon: MapPinned, to: "/regroupement" },
     ],
   },
-  {
+    {
     key: "stocks",
     title: "Stocks des commerces",
     short: "Stocks",
     owner: "Yessin",
     icon: Boxes,
     base: "/stocks",
-    prefixes: ["/stocks"],
-    ready: false,
-    description: "Suivi et contrôle des inventaires des Hanouts.",
-    tone: { bg: "bg-sky-50", text: "text-sky-600", grad: "from-sky-500 to-blue-600" },
-    actions: [
-      { label: "Déclarer un stock", icon: Package },
-      { label: "Stocks par région", icon: Boxes },
-      { label: "Seuils critiques", icon: Gauge },
-      { label: "Affecter les stocks", icon: Layers },
-    ],
+prefixes: ["/stocks", "/stock"],
+ready: true,
+roles: ["ADMIN", "COMMERCANT", "INSPECTEUR"],
+description: "Suivi et contrôle des inventaires des Hanouts.",
+tone: { bg: "bg-sky-50", text: "text-sky-600", grad: "from-sky-500 to-blue-600" },
+actions: [
+  { label: "Stocks", icon: Boxes, to: "/stocks", end: true },
+  { label: "Déclarer un stock", icon: Package, to: "/stocks/nouveau", roles: ["ADMIN", "COMMERCANT"] },
+  { label: "Produits en stock", icon: Boxes, to: "/stock", end: true },
+  { label: "Nouveau produit", icon: PlusCircle, to: "/stock/nouveau" },
+  { label: "Historique", icon: ClipboardList, to: "/stock/historique" },
+],
   },
   {
     key: "anomalies",
@@ -132,7 +134,8 @@ export const modules = [
 
 // Modules affichés dans les menus : « adminOnly » est réservé au rôle ADMIN.
 export const visibleModules = (user) =>
-  modules.filter((m) => !m.adminOnly || user?.role === "ADMIN");
+  modules.filter((m) => (!m.adminOnly || user?.role === "ADMIN")
+    && (!m.roles || m.roles.includes(user?.role)));
 
 export const isModuleActive = (m, pathname) =>
   m.prefixes.some((p) => pathname === p || pathname.startsWith(p + "/"));
