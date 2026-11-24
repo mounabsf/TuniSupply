@@ -7,6 +7,7 @@ class Role(models.TextChoices):
     COMMERCANT = "COMMERCANT", "Commerçant"
     GROSSISTE = "GROSSISTE", "Grossiste"
     INSPECTEUR = "INSPECTEUR", "Inspecteur"
+    LOGISTICIEN = "LOGISTICIEN", "Logisticien"
 
 
 # Rôles qu'une personne peut choisir elle-même à l'inscription.
@@ -20,6 +21,7 @@ class Profil(models.Model):
                                 related_name="profil")
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.COMMERCANT)
     telephone = models.CharField(max_length=20, blank=True)
+    depot_rattachement = models.CharField(max_length=255, blank=True, default="")
 
     def __str__(self):
         return f"{self.user.get_username()} ({self.get_role_display()})"

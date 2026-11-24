@@ -127,7 +127,9 @@ export default function Layout() {
           </p>
 
           {active
-            ? active.actions.map(({ label, icon: Icon, to, end, note }) =>
+            ? active.actions
+              .filter(({ roles }) => !roles || roles.includes(user?.role))
+              .map(({ label, icon: Icon, to, end }) =>
                 to ? (
                   <NavLink key={label} to={to} end={end} title={label} className={side}>
                     <Icon size={20} />

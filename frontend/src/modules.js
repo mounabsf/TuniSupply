@@ -1,7 +1,7 @@
 import { ALERTES_ACTIVE, LIEES_ACTIVE } from "./anomaliesConfig.js";
 import {
   AlertTriangle, Boxes, Brain, ClipboardList, Gauge, Map, MapPinned,
-  PlusCircle, ShieldAlert, Sparkles, Truck, Warehouse, Layers, Bell,
+  PlusCircle, ShieldAlert, Sparkles, Truck, Warehouse, Bell,
   Package, Route, Search, UserCog, UserPlus, Users,
 } from "lucide-react";
 
@@ -23,23 +23,25 @@ export const modules = [
       { label: "Regroupement par zone", icon: MapPinned, to: "/regroupement" },
     ],
   },
-  {
+    {
     key: "stocks",
     title: "Stocks des commerces",
     short: "Stocks",
     owner: "Yessin",
     icon: Boxes,
     base: "/stocks",
-    prefixes: ["/stocks"],
-    ready: false,
-    description: "Suivi et contrôle des inventaires des Hanouts.",
-    tone: { bg: "bg-sky-50", text: "text-sky-600", grad: "from-sky-500 to-blue-600" },
-    actions: [
-      { label: "Déclarer un stock", icon: Package },
-      { label: "Stocks par région", icon: Boxes },
-      { label: "Seuils critiques", icon: Gauge },
-      { label: "Affecter les stocks", icon: Layers },
-    ],
+prefixes: ["/stocks", "/stock"],
+ready: true,
+roles: ["ADMIN", "COMMERCANT", "INSPECTEUR"],
+description: "Suivi et contrôle des inventaires des Hanouts.",
+tone: { bg: "bg-sky-50", text: "text-sky-600", grad: "from-sky-500 to-blue-600" },
+actions: [
+  { label: "Stocks", icon: Boxes, to: "/stocks", end: true },
+  { label: "Déclarer un stock", icon: Package, to: "/stocks/nouveau", roles: ["ADMIN", "COMMERCANT"] },
+  { label: "Produits en stock", icon: Boxes, to: "/stock", end: true },
+  { label: "Nouveau produit", icon: PlusCircle, to: "/stock/nouveau" },
+  { label: "Historique", icon: ClipboardList, to: "/stock/historique" },
+],
   },
   {
     key: "anomalies",
@@ -68,12 +70,12 @@ export const modules = [
     icon: Warehouse,
     base: "/ressources",
     prefixes: ["/ressources"],
-    ready: false,
+    ready: true, // ← module d'Oumaima prêt (CRUD)
     description: "Réserves stratégiques des dépôts régionaux.",
     tone: { bg: "bg-violet-50", text: "text-violet-600", grad: "from-violet-500 to-purple-600" },
     actions: [
-      { label: "Ajouter un lot", icon: PlusCircle },
-      { label: "Ressources en temps réel", icon: Warehouse },
+      { label: "Ajouter un lot", icon: PlusCircle, to: "/ressources/nouveau" },
+      { label: "Ressources en temps réel", icon: Warehouse, to: "/ressources", end: true },
       { label: "Alertes de pénurie", icon: Bell },
       { label: "Incohérences de volume", icon: ShieldAlert },
     ],
@@ -86,12 +88,12 @@ export const modules = [
     icon: Truck,
     base: "/logistique",
     prefixes: ["/logistique"],
-    ready: false,
+    ready: true,
     description: "Tournées de livraison et risques de transport.",
     tone: { bg: "bg-rose-50", text: "text-rose-600", grad: "from-rose-500 to-pink-600" },
     actions: [
-      { label: "Planifier une tournée", icon: Route },
-      { label: "Opérations en cours", icon: Truck },
+      { label: "Planifier une opération", icon: Route, to: "/logistique/nouvelle" },
+      { label: "Consulter les opérations", icon: Truck, to: "/logistique", end: true },
       { label: "Niveau de risque d'une zone", icon: Gauge },
     ],
   },
@@ -134,7 +136,8 @@ export const modules = [
 
 // Modules affichés dans les menus : « adminOnly » est réservé au rôle ADMIN.
 export const visibleModules = (user) =>
-  modules.filter((m) => !m.adminOnly || user?.role === "ADMIN");
+  modules.filter((m) => (!m.adminOnly || user?.role === "ADMIN")
+    && (!m.roles || m.roles.includes(user?.role)));
 
 export const isModuleActive = (m, pathname) =>
   m.prefixes.some((p) => pathname === p || pathname.startsWith(p + "/"));

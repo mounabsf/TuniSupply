@@ -146,7 +146,7 @@ class CompteViewSet(viewsets.ModelViewSet):
             user.delete()
         except (ProtectedError, RestrictedError):
             return Response(
-                {"detail": "Ce compte est lié à des données (commerces, demandes…) et ne peut pas "
+                {"detail": "Ce compte est lié à des données (commerces, demandes, opérations logistiques…) et ne peut pas "
                            "être supprimé. Désactivez-le à la place."},
                 status=status.HTTP_409_CONFLICT)
         return Response(status=status.HTTP_204_NO_CONTENT)

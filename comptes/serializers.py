@@ -37,13 +37,19 @@ class CompteSerializer(serializers.ModelSerializer):
     role = serializers.ChoiceField(choices=Role.choices, source="profil.role")
     telephone = serializers.CharField(source="profil.telephone", required=False,
                                       allow_blank=True, max_length=20)
+    depot_rattachement = serializers.CharField(
+        source="profil.depot_rattachement",
+        required=False,
+        allow_blank=True,
+        max_length=255,
+    )
     password = serializers.CharField(write_only=True, required=False, allow_blank=True,
                                      trim_whitespace=False)
 
     class Meta:
         model = User
         fields = ["id", "username", "email", "first_name", "last_name", "role", "telephone",
-                  "password", "is_active", "date_joined", "last_login"]
+                  "depot_rattachement", "password", "is_active", "date_joined", "last_login"]
         read_only_fields = ["date_joined", "last_login"]
 
     def to_representation(self, instance):
@@ -74,11 +80,17 @@ class CompteSerializer(serializers.ModelSerializer):
         if cible.is_superuser and not moi.is_superuser:
             raise serializers.ValidationError(
                 {"detail": "Seul un super-utilisateur peut modifier ce compte."})
+        nouveau_role = attrs.get("profil", {}).get("role")
+        if (nouveau_role and role_de(cible) == Role.LOGISTICIEN
+                and nouveau_role != Role.LOGISTICIEN
+                and cible.operations_logistiques.exists()):
+            raise serializers.ValidationError({
+                "role": "Ce logisticien est affecté à des opérations et ne peut pas changer de rôle."
+            })
         if cible.pk == moi.pk:  # garde-fous anti-verrouillage
             if attrs.get("is_active") is False:
                 raise serializers.ValidationError(
                     {"detail": "Vous ne pouvez pas désactiver votre propre compte."})
-            nouveau_role = attrs.get("profil", {}).get("role")
             if nouveau_role and nouveau_role != Role.ADMIN:
                 raise serializers.ValidationError(
                     {"detail": "Vous ne pouvez pas retirer votre propre rôle d'administrateur."})
@@ -89,7 +101,12 @@ class CompteSerializer(serializers.ModelSerializer):
         profil = validated_data.pop("profil", {})
         password = validated_data.pop("password")
         user = User.objects.create_user(password=password, **validated_data)
-        appliquer_role(user, profil.get("role", Role.COMMERCANT), profil.get("telephone", ""))
+        appliquer_role(
+            user,
+            profil.get("role", Role.COMMERCANT),
+            profil.get("telephone", ""),
+            profil.get("depot_rattachement", ""),
+        )
         return user
 
     @transaction.atomic
@@ -102,7 +119,12 @@ class CompteSerializer(serializers.ModelSerializer):
             instance.set_password(password)
         instance.save()
         if profil:
-            appliquer_role(instance, profil.get("role", role_de(instance)), profil.get("telephone"))
+            appliquer_role(
+                instance,
+                profil.get("role", role_de(instance)),
+                profil.get("telephone"),
+                profil.get("depot_rattachement"),
+            )
         return instance
 
 

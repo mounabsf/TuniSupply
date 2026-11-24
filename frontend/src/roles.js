@@ -2,6 +2,7 @@ export const ROLES = [
   ["ADMIN", "Administrateur"],
   ["COMMERCANT", "Commerçant"],
   ["GROSSISTE", "Grossiste"],
+  ["LOGISTICIEN", "Logisticien"],
   ["INSPECTEUR", "Inspecteur"],
 ];
 export const ROLE_LABELS = Object.fromEntries(ROLES);
@@ -10,6 +11,7 @@ export const ROLE_BADGES = {
   ADMIN: "bg-rose-100 text-rose-700",
   COMMERCANT: "bg-amber-100 text-amber-700",
   GROSSISTE: "bg-sky-100 text-sky-700",
+  LOGISTICIEN: "bg-violet-100 text-violet-700",
   INSPECTEUR: "bg-emerald-100 text-emerald-700",
 };
 
@@ -24,6 +26,7 @@ const CHAMPS = {
   first_name: "Prénom",
   last_name: "Nom",
   telephone: "Téléphone",
+  depot_rattachement: "Dépôt de rattachement",
   role: "Rôle",
 };
 
