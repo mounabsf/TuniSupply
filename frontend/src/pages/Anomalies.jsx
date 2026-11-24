@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { AlertTriangle, Link2, MapPin, Pencil, Plus, Trash2 } from "lucide-react";
 import { api } from "../api.js";
-import { TYPES, TYPE_BADGES, formatDate } from "../anomaliesConfig.js";
+import { LIEES_ACTIVE, TYPES, TYPE_BADGES, formatDate } from "../anomaliesConfig.js";
 
 export default function Anomalies() {
   const [signalements, setSignalements] = useState([]);
@@ -87,9 +87,17 @@ export default function Anomalies() {
                 {s.inspecteur_nom && <> · par {s.inspecteur_nom}</>}
               </span>
               <div className="flex flex-wrap items-center gap-3">
-                <Link to={`/anomalies/liees/${s.id}`} className="inline-flex items-center gap-1 font-semibold text-emerald-600 hover:text-emerald-700">
-                  <Link2 size={15} /> Anomalies liées
-                </Link>
+                {LIEES_ACTIVE ? (
+                  <Link to={`/anomalies/liees/${s.id}`} className="inline-flex items-center gap-1 font-semibold text-emerald-600 hover:text-emerald-700">
+                    <Link2 size={15} /> Anomalies liées
+                  </Link>
+                ) : (
+                  <span title="Fonctionnalité prévue au sprint suivant" aria-disabled="true"
+                    className="inline-flex cursor-not-allowed items-center gap-1.5 font-semibold text-slate-300">
+                    <Link2 size={15} /> Anomalies liées
+                    <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[10px] font-bold text-amber-700">Sprint suivant</span>
+                  </span>
+                )}
                 {s.peut_modifier && (
                   <>
                     <Link to={`/anomalies/${s.id}/modifier`} title="Modifier"

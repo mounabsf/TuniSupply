@@ -1,5 +1,12 @@
 // Constantes partagées par les pages du module « Anomalies & alertes »
 
+// Fonctionnalité « Anomalies liées » : prévue pour le SPRINT SUIVANT.
+// false = désactivée partout (lien grisé, menu grisé, adresse redirigée). Passer à true pour la réactiver.
+export const LIEES_ACTIVE = false;
+
+// Page « Alertes prioritaires » : également prévue pour le SPRINT SUIVANT (même principe que ci-dessus).
+export const ALERTES_ACTIVE = false;
+
 export const TYPES = [
   ["", "Tous"],
   ["PRIX_ABUSIF", "Prix abusif"],

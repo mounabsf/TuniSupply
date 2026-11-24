@@ -1,4 +1,5 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { ALERTES_ACTIVE, LIEES_ACTIVE } from "./anomaliesConfig.js";
 import Layout from "./components/Layout.jsx";
 import { modules } from "./modules.js";
 import Home from "./pages/Home.jsx";
@@ -70,9 +71,11 @@ export default function App() {
         <Route path="/anomalies" element={<Anomalies />} />
         <Route path="/anomalies/nouveau" element={<AnomalieForm />} />
         <Route path="/anomalies/:id/modifier" element={<AnomalieForm />} />
-        <Route path="/anomalies/alertes" element={<Alertes />} />
-        <Route path="/anomalies/liees" element={<AnomaliesLiees />} />
-        <Route path="/anomalies/liees/:id" element={<AnomaliesLiees />} />
+        {/* « Alertes prioritaires » : sprint suivant -> redirection tant que ALERTES_ACTIVE est false */}
+        <Route path="/anomalies/alertes" element={ALERTES_ACTIVE ? <Alertes /> : <Navigate to="/anomalies" replace />} />
+        {/* « Anomalies liées » : sprint suivant -> redirection tant que LIEES_ACTIVE est false */}
+        <Route path="/anomalies/liees" element={LIEES_ACTIVE ? <AnomaliesLiees /> : <Navigate to="/anomalies" replace />} />
+        <Route path="/anomalies/liees/:id" element={LIEES_ACTIVE ? <AnomaliesLiees /> : <Navigate to="/anomalies" replace />} />
 
         {/* ===== Module Logistique (Firas) ===== */}
         <Route path="/logistique" element={<Operations />} />
