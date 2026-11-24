@@ -1,3 +1,4 @@
+import { ALERTES_ACTIVE, LIEES_ACTIVE } from "./anomaliesConfig.js";
 import {
   AlertTriangle, Boxes, Brain, ClipboardList, Gauge, Map, MapPinned,
   PlusCircle, ShieldAlert, Sparkles, Truck, Warehouse, Layers, Bell,
@@ -54,8 +55,9 @@ export const modules = [
     actions: [
       { label: "Anomalies signalées", icon: AlertTriangle, to: "/anomalies", end: true },
       { label: "Nouveau signalement", icon: PlusCircle, to: "/anomalies/nouveau" },
-      { label: "Alertes prioritaires", icon: Bell, to: "/anomalies/alertes" },
-      { label: "Anomalies liées", icon: Search, to: "/anomalies/liees" },
+      { label: "Alertes prioritaires", icon: Bell, to: ALERTES_ACTIVE ? "/anomalies/alertes" : undefined, note: "sprint suivant" },
+      // sans « to », le menu l'affiche grisé et non cliquable (voir LIEES_ACTIVE dans anomaliesConfig.js)
+      { label: "Anomalies liées", icon: Search, to: LIEES_ACTIVE ? "/anomalies/liees" : undefined, note: "sprint suivant" },
     ],
   },
   {

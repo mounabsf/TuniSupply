@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Activity, ArrowLeft, ArrowRight, BellRing, CircleCheck, ClipboardList, TriangleAlert, Users } from "lucide-react";
+import { ALERTES_ACTIVE } from "../anomaliesConfig.js";
 import imageHome from "../assets/brown_h.jpg";
 import { Anneau, Barres, Courbes, Jauge, Mini, Nombre, Tuiles } from "../components/charts.jsx";
 import { COULEURS } from "../couleurs.js";
@@ -178,7 +179,9 @@ export default function Statistiques() {
 
       <div className="grid gap-6 xl:grid-cols-3">
         <Carte titre="Alertes récentes" className={d.comptes ? "xl:col-span-2" : "xl:col-span-3"}
-          sous={<Link to="/anomalies/alertes" className="font-semibold text-emerald-600 hover:text-emerald-700">Voir toutes les alertes →</Link>}>
+          sous={ALERTES_ACTIVE
+            ? <Link to="/anomalies/alertes" className="font-semibold text-emerald-600 hover:text-emerald-700">Voir toutes les alertes →</Link>
+            : <span title="Fonctionnalité prévue au sprint suivant" className="cursor-not-allowed font-semibold text-slate-300">Voir toutes les alertes · sprint suivant</span>}>
           {d.alertes_recentes.length ? (
             <ul className="divide-y divide-slate-100">
               {d.alertes_recentes.map((a) => (

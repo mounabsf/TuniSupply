@@ -127,7 +127,7 @@ export default function Layout() {
           </p>
 
           {active
-            ? active.actions.map(({ label, icon: Icon, to, end }) =>
+            ? active.actions.map(({ label, icon: Icon, to, end, note }) =>
                 to ? (
                   <NavLink key={label} to={to} end={end} title={label} className={side}>
                     <Icon size={20} />
@@ -136,7 +136,7 @@ export default function Layout() {
                 ) : (
                   <div
                     key={label}
-                    title={`${label} (bientôt)`}
+                    title={`${label} (${note ?? "bientôt"})`}
                     className="flex cursor-not-allowed items-center justify-center gap-3 rounded-2xl px-3 py-3 text-sm font-semibold text-slate-300 lg:justify-start"
                   >
                     <Icon size={20} />
