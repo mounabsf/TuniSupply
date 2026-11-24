@@ -2,7 +2,7 @@ import { ALERTES_ACTIVE, LIEES_ACTIVE } from "./anomaliesConfig.js";
 import {
   AlertTriangle, Boxes, Brain, ClipboardList, Gauge, Map, MapPinned,
   PlusCircle, ShieldAlert, Sparkles, Truck, Warehouse, Bell,
-  Package, Route, Search, UserCog, UserPlus, Users,
+  Package, Route, Search, UserCog, UserPlus, Users, Building2,
 } from "lucide-react";
 
 export const modules = [
@@ -95,6 +95,22 @@ actions: [
       { label: "Planifier une opération", icon: Route, to: "/logistique/nouvelle" },
       { label: "Consulter les opérations", icon: Truck, to: "/logistique", end: true },
       { label: "Niveau de risque d'une zone", icon: Gauge },
+    ],
+  },
+  {
+    key: "fournisseurs",
+    title: "Fournisseurs",
+    short: "Fournisseurs",
+    owner: "Tout le groupe",
+    icon: Building2,
+    base: "/fournisseurs",
+    prefixes: ["/fournisseurs"],
+    ready: true,
+    description: "Suivi des fournisseurs, de leur fiabilité et de leurs livraisons.",
+    tone: { bg: "bg-sky-50", text: "text-sky-600", grad: "from-sky-500 to-blue-600" },
+    actions: [
+      { label: "Liste des fournisseurs", icon: Building2, to: "/fournisseurs", end: true },
+      { label: "Ajouter un fournisseur", icon: UserPlus, to: "/fournisseurs/nouveau" },
     ],
   },
   {

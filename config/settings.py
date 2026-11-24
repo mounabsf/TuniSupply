@@ -22,7 +22,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 import os 
 from dotenv import load_dotenv 
-# Charger les variables du fichier .env 
 load_dotenv(BASE_DIR / '.env') 
 # Récupérer la clé secrète 
 SECRET_KEY = os.getenv('SECRET_KEY') 
@@ -47,6 +46,7 @@ INSTALLED_APPS = [
     'dashboard',
     'logistique',
     'stocks',
+    'fournisseurs',
     'rest_framework',
     'inventory.apps.InventoryConfig',
 

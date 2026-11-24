@@ -28,6 +28,9 @@ import StockForm from "./pages/StockForm.jsx";
 import InventoryApp from "./pages/InventoryApp.jsx";
 import Stock from "./pages/Stock.jsx";
 import StockHistorique from "./pages/StockHistorique.jsx";
+import Fournisseurs from "./pages/Fournisseurs.jsx";
+import FournisseurForm from "./pages/FournisseurForm.jsx";
+import FournisseurHistorique from "./pages/FournisseurHistorique.jsx";
 export default function App() {
   return (
     <Routes>
@@ -81,6 +84,10 @@ export default function App() {
         <Route path="/logistique" element={<Operations />} />
         <Route path="/logistique/nouvelle" element={<OperationForm />} />
         <Route path="/logistique/:id/modifier" element={<OperationForm />} />
+        {/* ===== Module Fournisseurs ===== */}
+        <Route path="/fournisseurs" element={<Fournisseurs />} />
+        <Route path="/fournisseurs/nouveau" element={<FournisseurForm />} />
+        <Route path="/fournisseurs/:id/livraisons" element={<FournisseurHistorique />} />
         <Route path="/anomalies/liees/:id" element={<AnomaliesLiees />} />
         {/* ===== Module Gestion des stocks (Yessin) ===== */}
         <Route element={<RequireAuth roles={["ADMIN", "COMMERCANT", "INSPECTEUR"]} />}>
