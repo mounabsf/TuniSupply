@@ -1,4 +1,4 @@
-from rest_framework.routers import SimpleRouter
+from rest_framework.routers import SimpleRouter  # type: ignore[reportMissingImports]
 
 from .api import LogisticienViewSet, OperationLogistiqueViewSet
 
